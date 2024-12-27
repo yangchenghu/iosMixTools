@@ -4,7 +4,7 @@ import os,sys
 import random
 import string
 import re
-import md5
+# import md5
 import time
 import json
 import shutil
@@ -12,9 +12,9 @@ import hashlib
 import time
 import argparse
 
-import sys 
-reload(sys) 
-sys.setdefaultencoding("utf-8")
+# import sys 
+# reload(sys) 
+# sys.setdefaultencoding("utf-8")
 
 script_path = os.path.split(os.path.realpath(sys.argv[0]))[0]
 add_prefix = ""
@@ -56,14 +56,14 @@ def renameInAllFile(old_text, new_text):
             replaceStringInFile(full_path, old_text, new_text)
 
 def dealWithIos():
-    print "开始重命名类名"
+    print("开始重命名类名")
     global old_prefix, new_prefix, ios_src_path
     for parent, folders, files in os.walk(ios_src_path):
         for file in files:
             old_full_path = os.path.join(parent, file)
             if file.startswith(old_prefix) and not isNeedIgnore(old_full_path):
                 new_file_name = file.replace(old_prefix, new_prefix)
-                print "\t重命名文件: %s -> %s" %(file, new_file_name)
+                print(f"\t重命名文件: {file} -> {new_file_name}")
 
                 new_full_path = os.path.join(parent, new_file_name)
                 os.rename(old_full_path, new_full_path)
@@ -80,22 +80,22 @@ def dealWithIos():
             old_full_path = os.path.join(parent, folder)
             if folder.startswith(old_prefix) and not isNeedIgnore(old_full_path):
                 new_folder_name = folder.replace(old_prefix, new_prefix)
-                print "\t重命名文件夹: %s -> %s" %(folder, new_folder_name)
+                print(f"\t重命名文件夹: {folder} -> {new_folder_name}")
                 new_full_path = os.path.join(parent, new_folder_name)
                 os.rename(old_full_path, new_full_path)
                 #在项目工程中改名
                 renameFileInXcodeProj(folder, new_folder_name)
-    print "finish\n"
+    print("finish\n")
 
 def addPreFix():
-    print "开始添加前缀"
+    print("开始添加前缀")
     global add_prefix, ios_src_path
     for parent, folders, files in os.walk(ios_src_path):
         for file in files:
             old_full_path = os.path.join(parent, file)
             if not isNeedIgnore(old_full_path):
                 new_file_name = add_prefix + file
-                print "\t重命名文件: %s -> %s" %(file, new_file_name)
+                print(f"\t重命名文件: {file} -> {new_file_name}")
 
                 new_full_path = os.path.join(parent, new_file_name)
                 os.rename(old_full_path, new_full_path)
@@ -113,12 +113,12 @@ def addPreFix():
             old_full_path = os.path.join(parent, folder)
             if not isNeedIgnore(old_full_path):
                 new_folder_name = add_prefix + folder
-                print "\t重命名文件夹: %s -> %s" %(folder, new_folder_name)
+                print(f"\t重命名文件夹: {folder} -> {new_folder_name}")
                 new_full_path = os.path.join(parent, new_folder_name)
                 os.rename(old_full_path, new_full_path)
                 #在项目工程中改名
                 renameFileInXcodeProj(folder, new_folder_name)
-    print "finish\n"
+    print("finish\n")
 
 
 #----------------------------------------------------main------------------------------------------------        
@@ -143,13 +143,13 @@ def main():
     ios_src_path = app_args.ios_path
     project_file_path = os.path.join(app_args.proj_path, "project.pbxproj")
     if not os.path.exists(ios_src_path):
-        print "ios_path not exists: " +  ios_src_path
+        print(f"ios_path not exists: {ios_src_path}")
         exit(0)
     if not os.path.exists(project_file_path):
-        print "proj_path not exists: " +  project_file_path
+        print(f"proj_path not exists: {project_file_path}")
 
-    print "请提前备份文件夹或确认在版本管理软件中"
-    raw_input("回车继续执行")
+    print("请提前备份文件夹或确认在版本管理软件中")
+    input("回车继续执行")
     if add_prefix and add_prefix != "":
         addPreFix()
         exit(0)
